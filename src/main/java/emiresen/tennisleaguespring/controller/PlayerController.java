@@ -1,17 +1,17 @@
 package emiresen.tennisleaguespring.controller;
 
-
-import emiresen.tennisleaguespring.dataTransfer.dtos.request.PlayerLoginRequestDto;
-import emiresen.tennisleaguespring.dataTransfer.dtos.request.PlayerRegisterRequestDto;
-import emiresen.tennisleaguespring.dataTransfer.dtos.response.ResponseDto;
+import emiresen.tennisleaguespring.dataTransfer.dtos.response.PlayerProfileResponseDto;
 import emiresen.tennisleaguespring.document.Player;
 import emiresen.tennisleaguespring.service.PlayerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
+
 
 @RestController
 @RequiredArgsConstructor
@@ -19,39 +19,26 @@ import java.util.Optional;
 public class PlayerController {
 
     private final PlayerService playerService;
-//    private final Jwt
-
-
-    @PostMapping("/register")
-    @CrossOrigin("*")
-    public ResponseEntity<ResponseDto<Boolean>> registerNewPlayer(@RequestBody PlayerRegisterRequestDto dto){
-        boolean isSaved = playerService.register(dto);
-        return ResponseEntity.ok(ResponseDto.<Boolean>builder()
-                .code(200)
-                .message(isSaved ? "Player registered successfully" : "Email already in use!")
-                .data(isSaved)
-                .build());
-    }
-
-    @PostMapping("/login")
-    @CrossOrigin("*")
-    public ResponseEntity<ResponseDto<String>> login(@RequestBody PlayerLoginRequestDto dto){
-        Optional<Player> user = playerService.login(dto);
-        if(user.isEmpty()){
-
-        }
-        String token = jwtManager.createToken(user.get().getId());
-        return ResponseEntity.ok(ResponseDto.<String>builder()
-                .code(200)
-                .message("Başarılı şekilde giriş yapıldı")
-                .data(token)
-                .build());
-    }
-
-
 
     @GetMapping("/get-all")
     public ResponseEntity<List<Player>> getPlayers(){
         return ResponseEntity.ok(playerService.findAll());
+    }
+
+    @GetMapping("/player")
+    public ResponseEntity<PlayerProfileResponseDto> getPlayer(){
+        return ResponseEntity.ok(playerService.getPlayerProfile(getAuthenticatedUserEmail()));
+    }
+
+
+    private String getAuthenticatedUserEmail() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()) {
+            Object principal = authentication.getPrincipal();
+            if (principal instanceof UserDetails userDetails) {
+                return userDetails.getUsername(); // Assuming getUsername() returns the email
+            }
+        }
+        return null;
     }
 }
