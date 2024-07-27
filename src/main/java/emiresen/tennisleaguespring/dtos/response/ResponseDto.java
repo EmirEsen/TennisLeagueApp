@@ -1,4 +1,4 @@
-package emiresen.tennisleaguespring.dataTransfer.dtos.response;
+package emiresen.tennisleaguespring.dtos.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

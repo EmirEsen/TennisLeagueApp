@@ -1,9 +1,9 @@
 package emiresen.tennisleaguespring.service;
 
-import emiresen.tennisleaguespring.dataTransfer.dtos.request.PlayerLoginRequestDto;
-import emiresen.tennisleaguespring.dataTransfer.dtos.request.PlayerRegisterRequestDto;
-import emiresen.tennisleaguespring.dataTransfer.dtos.response.AuthenticationResponse;
-import emiresen.tennisleaguespring.dataTransfer.dtos.response.PlayerProfileResponseDto;
+import emiresen.tennisleaguespring.dtos.request.PlayerLoginRequestDto;
+import emiresen.tennisleaguespring.dtos.request.PlayerRegisterRequestDto;
+import emiresen.tennisleaguespring.dtos.response.AuthenticationResponse;
+import emiresen.tennisleaguespring.dtos.response.PlayerProfileResponseDto;
 import emiresen.tennisleaguespring.document.Player;
 import emiresen.tennisleaguespring.document.Role;
 import emiresen.tennisleaguespring.repository.PlayerRepository;
@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

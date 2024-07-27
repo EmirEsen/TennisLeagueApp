@@ -1,15 +1,12 @@
 package emiresen.tennisleaguespring.controller;
 
 
-import emiresen.tennisleaguespring.dataTransfer.dtos.request.PlayerLoginRequestDto;
-import emiresen.tennisleaguespring.dataTransfer.dtos.request.PlayerRegisterRequestDto;
-import emiresen.tennisleaguespring.dataTransfer.dtos.response.AuthenticationResponse;
-import emiresen.tennisleaguespring.dataTransfer.dtos.response.ResponseDto;
+import emiresen.tennisleaguespring.dtos.request.PlayerLoginRequestDto;
+import emiresen.tennisleaguespring.dtos.request.PlayerRegisterRequestDto;
+import emiresen.tennisleaguespring.dtos.response.AuthenticationResponse;
 import emiresen.tennisleaguespring.service.PlayerService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.bind.annotation.*;
 
 

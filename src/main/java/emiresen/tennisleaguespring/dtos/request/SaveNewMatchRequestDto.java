@@ -1,7 +1,7 @@
-package emiresen.tennisleaguespring.dataTransfer.dtos.response;
+package emiresen.tennisleaguespring.dtos.request;
 
 
-import emiresen.tennisleaguespring.document.Role;
+import emiresen.tennisleaguespring.document.Match;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,22 +14,17 @@ import org.springframework.data.mongodb.core.mapping.FieldType;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
 import java.time.LocalDateTime;
-import java.util.Date;
+import java.util.List;
 
-@Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class PlayerProfileResponseDto {
+@Data
+public class SaveNewMatchRequestDto {
 
-    private String firstname;
-    private String lastname;
-    private String email;
-    private Date dob;
-    private Double height;
-    private Double weight;
-    private Integer rating;
-    private String avatarImage;
+    private String player1Id;
+    private String player2Id;
 
+    private List<Match.Score> setScores;
 
 }

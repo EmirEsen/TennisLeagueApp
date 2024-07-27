@@ -1,4 +1,4 @@
-package emiresen.tennisleaguespring.config.security;
+package emiresen.tennisleaguespring.config;
 import emiresen.tennisleaguespring.repository.PlayerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

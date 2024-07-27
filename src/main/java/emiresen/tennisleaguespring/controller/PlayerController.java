@@ -1,6 +1,5 @@
 package emiresen.tennisleaguespring.controller;
-
-import emiresen.tennisleaguespring.dataTransfer.dtos.response.PlayerProfileResponseDto;
+import emiresen.tennisleaguespring.dtos.response.PlayerProfileResponseDto;
 import emiresen.tennisleaguespring.document.Player;
 import emiresen.tennisleaguespring.service.PlayerService;
 import lombok.RequiredArgsConstructor;
@@ -9,9 +8,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-
 
 @RestController
 @RequiredArgsConstructor
@@ -25,11 +22,10 @@ public class PlayerController {
         return ResponseEntity.ok(playerService.findAll());
     }
 
-    @GetMapping("/player")
-    public ResponseEntity<PlayerProfileResponseDto> getPlayer(){
+    @GetMapping("/profile")
+    public ResponseEntity<PlayerProfileResponseDto> getPlayerProfile(){
         return ResponseEntity.ok(playerService.getPlayerProfile(getAuthenticatedUserEmail()));
     }
-
 
     private String getAuthenticatedUserEmail() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
