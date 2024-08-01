@@ -1,11 +1,15 @@
 server:
-  port: 9090
+  port: 8080
 
 spring:
   data:
     mongodb:
       uri: mongodb://127.0.0.1:27017/players
       auto-index-creation: true
+
+logging:
+  level:
+    org.springframework.security: TRACE
 
 
 Jwt:

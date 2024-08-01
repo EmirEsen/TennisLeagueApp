@@ -4,6 +4,8 @@ import emiresen.tennisleaguespring.document.Player;
 import emiresen.tennisleaguespring.service.PlayerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,19 +14,20 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/player")
+@RequestMapping("/api/v1/player")
 public class PlayerController {
 
     private final PlayerService playerService;
 
-    @GetMapping("/get-all")
-    public ResponseEntity<List<Player>> getPlayers(){
+    @GetMapping("/profiles")
+    public ResponseEntity<List<PlayerProfileResponseDto>> getPlayerProfiles(){
         return ResponseEntity.ok(playerService.findAll());
     }
 
     @GetMapping("/profile")
+    @PreAuthorize("hasAnyAuthority('USER')")
     public ResponseEntity<PlayerProfileResponseDto> getPlayerProfile(){
-        return ResponseEntity.ok(playerService.getPlayerProfile(getAuthenticatedUserEmail()));
+        return ResponseEntity.ok(playerService.getPlayerProfileByEmail(getAuthenticatedUserEmail()));
     }
 
     private String getAuthenticatedUserEmail() {

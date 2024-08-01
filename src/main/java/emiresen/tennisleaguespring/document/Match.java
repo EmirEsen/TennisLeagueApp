@@ -14,7 +14,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.FieldType;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -28,7 +30,9 @@ public class Match {
 
     @MongoId(FieldType.OBJECT_ID)
     private String id;
-
+    private String court;
+    private LocalDate date;
+    private LocalTime time;
     @NotBlank
     @Indexed
     private String player1Id;
@@ -37,12 +41,10 @@ public class Match {
     @Indexed
     private String player2Id;
 
-    private List<Score> setScores;
+    private List<Score> score;
     private String winnerId;
 
-    @CreatedDate
     private LocalDateTime createdAt;
-    @LastModifiedDate
     private LocalDateTime updatedAt;
 
 
@@ -56,15 +58,5 @@ public class Match {
         private int player2Score;
     }
 
-//    Match match = Match.builder()
-//            .player1Id("player1IdHere")
-//            .player2Id("player2IdHere")
-//            .setScores(List.of(
-//                    new Match.SetScore("player1IdHere", 6, "player2IdHere", 3),
-//                    new Match.SetScore("player1IdHere", 4, "player2IdHere", 6),
-//                    new Match.SetScore("player1IdHere", 7, "player2IdHere", 5)
-//            ))
-//            .winnerId("player1IdHere")
-//            .build();
 
 }

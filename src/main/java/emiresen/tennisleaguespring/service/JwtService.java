@@ -17,7 +17,7 @@ public class JwtService {
     @Value("${Jwt.secret.key}")
     private String SECRET_KEY;
 
-    private final Long expiration = 1000L*60*60;
+    private final Long expiration = 1000L*60*2;
 
 
     public String generateToken(UserDetails userDetails) {
@@ -43,6 +43,7 @@ public class JwtService {
     }
 
     public String extractEmail(String token) {
+        System.out.println("token sent: " + token);
         return JWT.decode(token).getSubject();
     }
 
