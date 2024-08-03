@@ -5,23 +5,27 @@ import emiresen.tennisleaguespring.dtos.request.PlayerRegisterRequestDto;
 import emiresen.tennisleaguespring.dtos.response.AuthenticationResponse;
 import emiresen.tennisleaguespring.dtos.response.PlayerProfileResponseDto;
 import emiresen.tennisleaguespring.document.Player;
-import emiresen.tennisleaguespring.document.Role;
 import emiresen.tennisleaguespring.repository.PlayerRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
+import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class PlayerService {
 
     private final PlayerRepository playerRepository;
+
+    public Optional<Player> save(Player player) {
+        Player playerSaved = playerRepository.save(player);
+        return Optional.of(playerSaved);
+    }
+
+    public Optional<Player> findById(String id) {
+        return playerRepository.findById(id);
+    }
 
     public List<PlayerProfileResponseDto> findAll() {
         List<PlayerProfileResponseDto> playerProfileResponseDtos;

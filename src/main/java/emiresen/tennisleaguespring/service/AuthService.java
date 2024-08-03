@@ -32,7 +32,6 @@ public class AuthService {
                 .email(dto.getEmail())
                 .password(passwordEncoder.encode(dto.getPassword()))
                 .role(Role.USER)
-                .createdAt(LocalDateTime.now())
                 .build();
         playerRepository.save(newPlayer);
         String token = jwtService.generateToken(newPlayer);

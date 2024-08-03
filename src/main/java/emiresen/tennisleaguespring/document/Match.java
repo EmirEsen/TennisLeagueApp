@@ -17,9 +17,8 @@ import org.springframework.data.mongodb.core.mapping.MongoId;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
+
 
 @Document("matches")
 @NoArgsConstructor
@@ -44,7 +43,10 @@ public class Match {
     private List<Score> score;
     private String winnerId;
 
+    private String createdById;
+    @CreatedDate
     private LocalDateTime createdAt;
+    @LastModifiedDate
     private LocalDateTime updatedAt;
 
 

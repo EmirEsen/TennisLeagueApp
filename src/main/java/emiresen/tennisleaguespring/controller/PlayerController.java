@@ -30,6 +30,12 @@ public class PlayerController {
         return ResponseEntity.ok(playerService.getPlayerProfileByEmail(getAuthenticatedUserEmail()));
     }
 
+    @PostMapping("/profile/update")
+    @PreAuthorize("hasAnyAuthority('USER')")
+    public ResponseEntity<PlayerProfileResponseDto> updatePlayerProfile(){
+        return ResponseEntity.ok(playerService.getPlayerProfileByEmail(getAuthenticatedUserEmail()));
+    }
+
     private String getAuthenticatedUserEmail() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.isAuthenticated()) {

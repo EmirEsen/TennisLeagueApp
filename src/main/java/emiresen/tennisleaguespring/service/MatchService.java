@@ -2,16 +2,23 @@ package emiresen.tennisleaguespring.service;
 
 
 import emiresen.tennisleaguespring.document.Match;
+import emiresen.tennisleaguespring.document.Player;
 import emiresen.tennisleaguespring.dtos.request.SaveNewMatchRequestDto;
 import emiresen.tennisleaguespring.dtos.response.MatchResponseDto;
+import emiresen.tennisleaguespring.dtos.response.PlayerProfileResponseDto;
+import emiresen.tennisleaguespring.dtos.response.ResponseDto;
 import emiresen.tennisleaguespring.repository.MatchRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -19,8 +26,13 @@ import java.util.stream.Collectors;
 public class MatchService {
 
     private final MatchRepository matchRepository;
+    private final PlayerService playerService;
+    private final EloRatingService eloRatingService;
 
-    public void saveNewMatch(SaveNewMatchRequestDto dto) {
+    public MatchResponseDto saveNewMatch(SaveNewMatchRequestDto dto) {
+        Optional<Player> playerA = playerService.findById(dto.getPlayer1Id());
+        Optional<Player> playerB = playerService.findById(dto.getPlayer2Id());
+
         List<Match.Score> score = dto.getScore().stream()
                 .map(scoreDto -> new Match.Score(
                         dto.getPlayer1Id(),
@@ -30,6 +42,10 @@ public class MatchService {
                 ))
                 .toList();
 
+        PlayerProfileResponseDto playerProfile = playerService
+                .getPlayerProfileByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+
+
         Match match = Match.builder()
                 .court(dto.getCourt())
                 .date(dto.getDate())
@@ -38,11 +54,34 @@ public class MatchService {
                 .player2Id(dto.getPlayer2Id())
                 .score(score)
                 .winnerId(determineWinner(dto))
-                .createdAt(LocalDateTime.now())
+                .createdById(playerProfile.id())
                 .build();
 
-        matchRepository.save(match);
+            Match saved = matchRepository.save(match);
 
+        if (playerA.isPresent() && playerB.isPresent()) {
+            Player player1 = playerA.get();
+            Player player2 = playerB.get();
+
+            int scoreA = (saved.getWinnerId().equals(player1.getId())) ? 1 : 0;
+            int scoreB = (saved.getWinnerId().equals(player2.getId())) ? 1 : 0;
+
+            eloRatingService.updatePlayerRatings(player1, player2, scoreA, scoreB);
+
+            playerService.save(player1);
+            playerService.save(player2);
+        }
+
+        return MatchResponseDto.builder()
+                        .id(saved.getId())
+                        .court(saved.getCourt())
+                        .date(saved.getDate())
+                        .time(saved.getTime())
+                        .player1Id(saved.getPlayer1Id())
+                        .player2Id(saved.getPlayer2Id())
+                        .score(saved.getScore())
+                        .winnerId(saved.getWinnerId())
+                        .build();
     }
 
     public String determineWinner(SaveNewMatchRequestDto dto) {
