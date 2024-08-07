@@ -22,12 +22,18 @@ public class MatchController {
 
     // todo after saving new match return new player list which will be with updated ratings
     @PostMapping("/save")
-    public ResponseEntity<ResponseDto<MatchResponseDto>> saveNewMatch(@RequestBody @Valid SaveNewMatchRequestDto newMatchDto, Authentication authentication) {
+    @PreAuthorize("hasAnyAuthority('USER')")
+    public ResponseEntity<ResponseDto<MatchResponseDto>> saveNewMatch(@RequestBody SaveNewMatchRequestDto newMatchDto, Authentication authentication) {
+        System.out.println("-".repeat(20));
+        System.out.println(newMatchDto);
+        System.out.println("Authentication: " + authentication);
+        System.out.println("Authorities: " + authentication.getAuthorities());
+        System.out.println("-".repeat(20));
         MatchResponseDto matchResponseDto = matchService.saveNewMatch(newMatchDto);
         return ResponseEntity.ok(ResponseDto.<MatchResponseDto>builder()
-                        .code(200)
-                        .data(matchResponseDto)
-                        .message("%s match saved successfully".formatted(matchResponseDto.getId()))
+                .code(200)
+                .data(matchResponseDto)
+                .message("%s match saved successfully".formatted(matchResponseDto.getId()))
                 .build()
         );
     }

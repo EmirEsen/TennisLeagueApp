@@ -37,8 +37,6 @@ public class SecurityConfig {
                                 .permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/v1/match/matches", "/api/v1/player/profiles")
                                 .permitAll()
-//                                .requestMatchers(HttpMethod.POST,"/api/v1/player/**", "/api/v1/match/**")
-//                                .permitAll()
                                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
                                 .anyRequest()
                                 .authenticated()
@@ -53,5 +51,4 @@ public class SecurityConfig {
 
         return http.build();
     }
-
 }

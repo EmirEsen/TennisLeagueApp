@@ -1,4 +1,5 @@
 package emiresen.tennisleaguespring.controller;
+import emiresen.tennisleaguespring.dtos.request.PlayerProfileUpdateDto;
 import emiresen.tennisleaguespring.dtos.response.PlayerProfileResponseDto;
 import emiresen.tennisleaguespring.document.Player;
 import emiresen.tennisleaguespring.service.PlayerService;
@@ -25,14 +26,18 @@ public class PlayerController {
     }
 
     @GetMapping("/profile")
-    @PreAuthorize("hasAnyAuthority('USER')")
     public ResponseEntity<PlayerProfileResponseDto> getPlayerProfile(){
-        return ResponseEntity.ok(playerService.getPlayerProfileByEmail(getAuthenticatedUserEmail()));
+        PlayerProfileResponseDto playerProfileByEmail = playerService
+                .getPlayerProfileByEmail(getAuthenticatedUserEmail());
+        System.out.println(playerProfileByEmail);
+        return ResponseEntity.ok(playerProfileByEmail);
     }
 
-    @PostMapping("/profile/update")
+    @PutMapping("/profile/update")
     @PreAuthorize("hasAnyAuthority('USER')")
-    public ResponseEntity<PlayerProfileResponseDto> updatePlayerProfile(){
+    public ResponseEntity<PlayerProfileResponseDto> updatePlayerProfile(@RequestBody PlayerProfileUpdateDto playerProfileUpdateDto, Authentication authentication){
+        PlayerProfileResponseDto updateProfile = playerService.update(playerProfileUpdateDto);
+        System.out.println(updateProfile);
         return ResponseEntity.ok(playerService.getPlayerProfileByEmail(getAuthenticatedUserEmail()));
     }
 

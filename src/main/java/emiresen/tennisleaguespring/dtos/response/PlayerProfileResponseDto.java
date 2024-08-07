@@ -1,9 +1,6 @@
 package emiresen.tennisleaguespring.dtos.response;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
@@ -14,10 +11,17 @@ public record PlayerProfileResponseDto(
         String lastname,
         String email,
         Date dob,
-        Double height,
-        Double weight,
+        String heightInCm,
+        String weightInKg,
         Integer rating,
-        String avatarImage) {}
+        Integer matchPlayed,
+        Integer win,
+        Integer lose,
+        String avatarImage
+) {}
+
+
+
 
 
 

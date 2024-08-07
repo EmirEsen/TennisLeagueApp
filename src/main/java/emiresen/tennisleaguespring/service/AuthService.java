@@ -10,6 +10,8 @@ import emiresen.tennisleaguespring.repository.PlayerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -42,12 +44,19 @@ public class AuthService {
 
 
     public String login(PlayerLoginRequestDto dto) {
-        authenticationManager.authenticate(
+        Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(dto.getEmail(), dto.getPassword())
         );
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
         Player authenticatedPlayer = playerRepository.findOptionalByEmail(dto.getEmail()).get();
         String token = jwtService.generateToken(authenticatedPlayer);
-        System.out.println(token);
+        System.out.println("Generated token at login: " + token);
+        System.out.println(authentication.isAuthenticated());
+        System.out.println(authentication.getCredentials());
+        System.out.println(authentication.getDetails());
+        System.out.println(authentication.getAuthorities());
+        System.out.println(authentication.getPrincipal());
         return token;
     }
 }

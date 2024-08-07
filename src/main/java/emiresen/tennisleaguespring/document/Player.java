@@ -39,9 +39,12 @@ public class Player implements UserDetails {
     private String password;
     @NotNull
     private Date dob;
-    private Double height;
-    private Double weight;
+    private String heightInCm;
+    private String weightInKg;
     private Integer rating;
+    private Integer matchPlayed;
+    private Integer win;
+    private Integer lose;
     private String avatarImage;
 
     @CreatedDate
