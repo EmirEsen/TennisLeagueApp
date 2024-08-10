@@ -10,6 +10,7 @@ public record PlayerProfileUpdateDto(
         String lastname,
         String heightInCm,
         String weightInKg,
+        String profileImageId,
         Date dob
         ) {
 }

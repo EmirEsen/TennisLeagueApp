@@ -45,7 +45,7 @@ public class Player implements UserDetails {
     private Integer matchPlayed;
     private Integer win;
     private Integer lose;
-    private String avatarImage;
+    private String profileImageId;
 
     @CreatedDate
     private LocalDateTime createdAt;

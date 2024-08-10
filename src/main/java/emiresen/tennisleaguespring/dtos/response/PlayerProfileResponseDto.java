@@ -17,7 +17,7 @@ public record PlayerProfileResponseDto(
         Integer matchPlayed,
         Integer win,
         Integer lose,
-        String avatarImage
+        String profileImageUrl
 ) {}
 
 

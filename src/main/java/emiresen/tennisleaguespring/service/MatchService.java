@@ -144,6 +144,7 @@ public class MatchService {
                         .court(match.getCourt())
                         .date(match.getDate())
                         .time(match.getTime())
+                        .createdAt(match.getCreatedAt())
                         .build()
         ).toList();
         return matchResponseDtos;

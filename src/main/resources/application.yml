@@ -11,9 +11,15 @@ logging:
   level:
     org.springframework.security: TRACE
 
-
 Jwt:
   secret:
     key: ${JWT_KEY}
+
+aws:
+  region: eu-north-1
+  s3:
+    buckets:
+      customer: tennisleaguebucket
+
 
 

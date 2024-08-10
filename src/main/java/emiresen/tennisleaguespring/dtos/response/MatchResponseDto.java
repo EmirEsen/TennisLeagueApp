@@ -23,6 +23,7 @@ public class MatchResponseDto {
     private LocalTime time;
     private String player1Id;
     private String player2Id;
+    private LocalDateTime createdAt;
 
     private List<Match.Score> score;
     private String winnerId;
