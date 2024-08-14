@@ -11,8 +11,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -33,7 +35,6 @@ public class MatchService {
         if (playerA.isPresent() && playerB.isPresent()) {
             updatePlayerStatsIfPresent(playerA.get(), playerB.get(), saved);
         }
-
         return buildMatchResponseDto(saved);
     }
 
@@ -148,6 +149,25 @@ public class MatchService {
                         .build()
         ).toList();
         return matchResponseDtos;
+    }
+
+    public List<MatchResponseDto> findLatestSix() {
+        return matchRepository.findAll().stream()
+                .sorted(Comparator.comparing(Match::getCreatedAt).reversed())
+                .limit(6)
+                .map(match ->
+                        MatchResponseDto.builder()
+                                .id(match.getId())
+                                .player1Id(match.getPlayer1Id())
+                                .player2Id(match.getPlayer2Id())
+                                .score(match.getScore())
+                                .winnerId(match.getWinnerId())
+                                .court(match.getCourt())
+                                .date(match.getDate())
+                                .time(match.getTime())
+                                .createdAt(match.getCreatedAt())
+                                .build()
+                ).toList();
     }
 
     public boolean isFirstMatch(String playerId) {

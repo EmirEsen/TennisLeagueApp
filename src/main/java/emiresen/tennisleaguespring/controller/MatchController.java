@@ -41,7 +41,7 @@ public class MatchController {
 
     @GetMapping("/matches")
     public ResponseEntity<List<MatchResponseDto>> getMatches() {
-        return ResponseEntity.ok(matchService.findAll());
+        return ResponseEntity.ok(matchService.findLatestSix());
 
     }
 }

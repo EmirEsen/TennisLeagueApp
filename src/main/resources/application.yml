@@ -15,7 +15,10 @@ Jwt:
   secret:
     key: ${JWT_KEY}
 
+
 aws:
+  credentials:
+    profile: tennisuser
   region: eu-north-1
   s3:
     buckets:

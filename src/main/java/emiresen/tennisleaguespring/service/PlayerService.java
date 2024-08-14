@@ -1,7 +1,6 @@
 package emiresen.tennisleaguespring.service;
 
 import emiresen.tennisleaguespring.config.s3.S3Buckets;
-import emiresen.tennisleaguespring.config.s3.S3Config;
 import emiresen.tennisleaguespring.dtos.request.PlayerProfileUpdateDto;
 import emiresen.tennisleaguespring.dtos.response.PlayerProfileResponseDto;
 import emiresen.tennisleaguespring.document.Player;
@@ -14,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -76,18 +76,15 @@ public class PlayerService {
     public List<PlayerProfileResponseDto> findAll() {
         return playerRepository.findAll().stream()
                 .map(player -> {
-                    // Generate S3 URL, handle potential errors
                     String profileImageUrl = null;
                     try {
                         profileImageUrl = s3Service.createPresignedGetUrl(
-                                s3Buckets.getCustomer(), "profile-images/%s/%s".formatted(player.getId(), player.getProfileImageId()) );
+                                s3Buckets.getCustomer(), "profile-images/%s/%s".formatted(player.getId(), player.getProfileImageId()));
                     } catch (Exception e) {
-                        // Handle or log the exception as needed
                         System.out.println(e.getMessage());
                         System.err.println("Failed to generate S3 URL for player: " + player.getId());
                     }
 
-                    // Build the PlayerProfileResponseDto
                     return PlayerProfileResponseDto.builder()
                             .id(player.getId())
                             .firstname(player.getFirstname())
@@ -103,6 +100,7 @@ public class PlayerService {
                             .profileImageUrl(profileImageUrl)
                             .build();
                 })
+                .sorted(Comparator.comparing(PlayerProfileResponseDto::rating).reversed())
                 .toList();
     }
 
@@ -115,7 +113,7 @@ public class PlayerService {
             String profileImageUrl = null;
             if (player.getProfileImageId() != null) {
                 profileImageUrl = s3Service.createPresignedGetUrl(
-                        s3Buckets.getCustomer(), "profile-images/%s/%s".formatted(player.getId(), player.getProfileImageId()) );
+                        s3Buckets.getCustomer(), "profile-images/%s/%s".formatted(player.getId(), player.getProfileImageId()));
             }
             return PlayerProfileResponseDto.builder()
                     .id(player.getId())
@@ -143,7 +141,15 @@ public class PlayerService {
     public void uploadPlayerProfileImage(MultipartFile file, Authentication authentication) {
         PlayerProfileResponseDto profileByEmail = getPlayerProfileByEmail(authentication.getName());
         String profileImageId = UUID.randomUUID().toString();
+
+        String existingProfileImageId = profileByEmail.profileImageId();
         try {
+            // Delete the old file in the S3 bucket if it exists
+            if (existingProfileImageId != null && !existingProfileImageId.isEmpty()) {
+                s3Service.deleteObject(s3Buckets.getCustomer(),
+                        "profile-images/%s/%s".formatted(profileByEmail.id(), existingProfileImageId));
+            }
+
             s3Service.putObject(s3Buckets.getCustomer(),
                     "profile-images/%s/%s".formatted(profileByEmail.id(), profileImageId),
                     file.getBytes()
