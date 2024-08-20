@@ -24,13 +24,13 @@ public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
-    private final CorsConfigurationSource corsConfigurationSource;
+//    private final CorsConfigurationSource corsConfigurationSource;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
-                .cors(corsCustomizer -> corsCustomizer.configurationSource(corsConfigurationSource))
+//                .cors(corsCustomizer -> corsCustomizer.configurationSource(corsConfigurationSource))
                 .authorizeHttpRequests((requests) ->
                         requests
                                 .requestMatchers(HttpMethod.POST, "/api/v1/auth/**")

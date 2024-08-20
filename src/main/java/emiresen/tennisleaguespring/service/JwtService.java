@@ -6,10 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import javax.crypto.SecretKey;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 @Service
 public class JwtService {
@@ -19,6 +16,9 @@ public class JwtService {
 
     private final Long expiration = 1000L*60*10;
 
+    public String getSECRET_KEY() {
+        return SECRET_KEY;
+    }
 
     public String generateToken(UserDetails userDetails) {
         Algorithm algorithm = Algorithm.HMAC256(SECRET_KEY);
@@ -44,6 +44,7 @@ public class JwtService {
 
     public String extractEmail(String token) {
         System.out.println("token sent: " + token);
+        System.out.println("SECRET: " + SECRET_KEY);
         return JWT.decode(token).getSubject();
     }
 

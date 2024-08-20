@@ -1,0 +1,30 @@
+{
+  "AWSEBDockerrunVersion" : 2,
+  "containerDefinitions": [
+    {
+      "name": "tennis_league_spring",
+      "image": "emiresen/tennis_league_spring",
+      "hostname": "tennis_league_spring",
+      "essential": false,
+      "portMappings": [
+        {
+          "hostPort": 8080,
+          "containerPort": 8080
+        }
+      ],
+      "links": ["tennis_league_react", "mongo"]
+    },
+    {
+      "name": "tennis_league_react",
+      "image": "emiresen/tennis_league_react",
+      "hostname": "tennis_league_react",
+      "essential": true
+    },
+    {
+      "name": "mongo",
+      "image": "mongo",
+      "hostname": "mongo",
+      "essential": false
+    }
+  ]
+}
