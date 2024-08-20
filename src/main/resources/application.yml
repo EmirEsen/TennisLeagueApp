@@ -4,25 +4,35 @@ server:
 spring:
   data:
     mongodb:
-      uri: mongodb://127.0.0.1:27017/players
+#      uri: mongodb://127.0.0.1:27017/players
+      uri: ${spring.data.mongodb.uri}
       auto-index-creation: true
 
-logging:
-  level:
-    org.springframework.security: TRACE
+#logging:
+#  level:
+#    org.springframework.security: TRACE
 
 Jwt:
   secret:
     key: ${JWT_KEY}
 
 
+#aws:
+#  credentials:
+#    profile: default
+#  region: eu-north-1
+#  s3:
+#    buckets:
+#      customer: tennisleaguebucket
+
+#  for Docker COntainer
 aws:
   credentials:
-    profile: tennisuser
-  region: eu-north-1
+    accessKeyId: ${AWS_ACCESS_KEY_ID}
+    secretAccessKey: ${AWS_SECRET_ACCESS_KEY}
+  region: ${AWS_REGION}
   s3:
     buckets:
       customer: tennisleaguebucket
-
 
 

@@ -100,8 +100,20 @@ public class PlayerService {
                             .profileImageUrl(profileImageUrl)
                             .build();
                 })
-                .sorted(Comparator.comparing(PlayerProfileResponseDto::rating).reversed())
+//                .sorted(Comparator.comparing(PlayerProfileResponseDto::rating).reversed())
+                .sorted((p1, p2) -> {
+                    if (p1.rating() == null && p2.rating() == null) {
+                        return 0; // Both are null, they are equal
+                    } else if (p1.rating() == null) {
+                        return 1; // p1 is null, put it after p2
+                    } else if (p2.rating() == null) {
+                        return -1; // p2 is null, put it after p1
+                    } else {
+                        return p2.rating().compareTo(p1.rating());
+                    }
+                })
                 .toList();
+
     }
 
 

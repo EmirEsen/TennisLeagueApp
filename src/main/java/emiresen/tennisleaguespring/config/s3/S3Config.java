@@ -3,8 +3,10 @@ package emiresen.tennisleaguespring.config.s3;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
 import software.amazon.awssdk.auth.credentials.ProfileCredentialsProvider;
+import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 
@@ -13,11 +15,32 @@ import software.amazon.awssdk.services.s3.S3Client;
 public class S3Config {
 
     //using .aws
-    @Value("${aws.credentials.profile}")
-    private String awsProfile;
+//    @Value("${aws.credentials.profile}")
+//    private String awsProfile;
+
+//    @Value("${aws.region}")
+//    private String region;
+
+    @Value("${aws.credentials.accessKeyId}")
+    private String awsAccessKeyId;
+
+    @Value("${aws.credentials.secretAccessKey}")
+    private String awsSecretAccessKey;
 
     @Value("${aws.region}")
     private String region;
+
+    public String getAwsAccessKeyId() {
+        return awsAccessKeyId;
+    }
+
+    public String getAwsSecretAccessKey() {
+        return awsSecretAccessKey;
+    }
+
+    public String getRegion() {
+        return region;
+    }
 
     private AwsCredentialsProvider credentialsProvider(String profileName) {
         return ProfileCredentialsProvider.builder()
@@ -27,11 +50,15 @@ public class S3Config {
 
     @Bean
     public S3Client s3Client(){
-        S3Client client = S3Client.builder()
+        AwsCredentialsProvider credentialsProvider = StaticCredentialsProvider.create(
+                AwsBasicCredentials.create(awsAccessKeyId, awsSecretAccessKey)
+        );
+
+        return S3Client.builder()
                 .region(Region.of(region))
 //                .credentialsProvider(credentialsProvider(awsProfile))
+                .credentialsProvider(credentialsProvider)
                 .build();
-        return client;
     }
 
 }
