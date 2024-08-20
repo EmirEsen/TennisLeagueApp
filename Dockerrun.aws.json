@@ -6,6 +6,7 @@
       "image": "emiresen/tennis_league_spring",
       "hostname": "tennis_league_spring",
       "essential": false,
+      "memory": 128,
       "portMappings": [
         {
           "hostPort": 8080,
@@ -18,13 +19,15 @@
       "name": "tennis_league_react",
       "image": "emiresen/tennis_league_react",
       "hostname": "tennis_league_react",
-      "essential": true
+      "essential": true,
+      "memory": 128
     },
     {
       "name": "mongo",
       "image": "mongo",
       "hostname": "mongo",
-      "essential": false
+      "essential": false,
+      "memory": 128
     }
   ]
 }
