@@ -6,7 +6,6 @@ import emiresen.tennisleaguespring.dtos.request.PlayerRegisterRequestDto;
 import emiresen.tennisleaguespring.dtos.response.AuthenticationResponse;
 import emiresen.tennisleaguespring.dtos.response.ResponseDto;
 import emiresen.tennisleaguespring.service.AuthService;
-import emiresen.tennisleaguespring.service.PlayerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
