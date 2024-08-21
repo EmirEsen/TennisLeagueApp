@@ -6,6 +6,7 @@ import emiresen.tennisleaguespring.dtos.request.PlayerRegisterRequestDto;
 import emiresen.tennisleaguespring.dtos.response.AuthenticationResponse;
 import emiresen.tennisleaguespring.dtos.response.ResponseDto;
 import emiresen.tennisleaguespring.service.AuthService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +20,7 @@ public class AuthenticationController {
     private final AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponse> registerNewPlayer(@RequestBody PlayerRegisterRequestDto dto) {
+    public ResponseEntity<AuthenticationResponse> registerNewPlayer(@Valid @RequestBody PlayerRegisterRequestDto dto) {
         AuthenticationResponse registeredPlayer = authService.register(dto);
         return ResponseEntity.ok(registeredPlayer);
     }

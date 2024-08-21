@@ -27,10 +27,10 @@ public class AuthService {
 
     public AuthenticationResponse register(PlayerRegisterRequestDto dto) {
         Player newPlayer = Player.builder()
-                .firstname(dto.getFirstname())
-                .lastname(dto.getLastname())
-                .email(dto.getEmail())
-                .password(passwordEncoder.encode(dto.getPassword()))
+                .firstname(dto.firstname())
+                .lastname(dto.lastname())
+                .email(dto.email())
+                .password(passwordEncoder.encode(dto.password()))
                 .role(Role.USER)
                 .build();
         playerRepository.save(newPlayer);
