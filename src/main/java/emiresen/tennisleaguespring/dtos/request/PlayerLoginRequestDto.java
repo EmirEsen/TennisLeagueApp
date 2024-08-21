@@ -2,17 +2,9 @@ package emiresen.tennisleaguespring.dtos.request;
 
 
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Builder
-@AllArgsConstructor
-@NoArgsConstructor
-@Data
-public class PlayerLoginRequestDto {
+public record PlayerLoginRequestDto(@NotBlank String email, @NotBlank String password) {
 
-    private String email;
-    private String password;
 }

@@ -16,10 +16,6 @@ public class JwtService {
 
     private final Long expiration = 1000L*60*10;
 
-    public String getSECRET_KEY() {
-        return SECRET_KEY;
-    }
-
     public String generateToken(UserDetails userDetails) {
         Algorithm algorithm = Algorithm.HMAC256(SECRET_KEY);
         return JWT.create()

@@ -31,7 +31,7 @@ public class Match {
     private String id;
     private String court;
     private LocalDate date;
-    private LocalTime time;
+    private String time;
     @NotBlank
     @Indexed
     private String player1Id;

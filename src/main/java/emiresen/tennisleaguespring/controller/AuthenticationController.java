@@ -29,9 +29,9 @@ public class AuthenticationController {
     public ResponseEntity<ResponseDto<String>> login(@RequestBody PlayerLoginRequestDto dto) {
         String loggedInPlayerToken = authService.login(dto);
         return ResponseEntity.ok(ResponseDto.<String>builder()
-                        .code(200)
-                        .data(loggedInPlayerToken)
-                        .message("Player logged in")
+                .code(200)
+                .data(loggedInPlayerToken)
+                .message("Player logged in")
                 .build());
     }
 

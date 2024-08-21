@@ -20,7 +20,7 @@ public class MatchResponseDto {
     private String id;
     private String court;
     private LocalDate date;
-    private LocalTime time;
+    private String time;
     private String player1Id;
     private String player2Id;
     private LocalDateTime createdAt;

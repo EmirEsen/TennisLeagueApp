@@ -1,16 +1,18 @@
 package emiresen.tennisleaguespring.service;
 
-
 import emiresen.tennisleaguespring.document.Player;
 import emiresen.tennisleaguespring.document.Role;
 import emiresen.tennisleaguespring.dtos.request.PlayerLoginRequestDto;
 import emiresen.tennisleaguespring.dtos.request.PlayerRegisterRequestDto;
 import emiresen.tennisleaguespring.dtos.response.AuthenticationResponse;
+import emiresen.tennisleaguespring.exception.ErrorType;
+import emiresen.tennisleaguespring.exception.TennisLeagueAppException;
 import emiresen.tennisleaguespring.repository.PlayerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -24,7 +26,6 @@ public class AuthService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
-
     public AuthenticationResponse register(PlayerRegisterRequestDto dto) {
         Player newPlayer = Player.builder()
                 .firstname(dto.firstname())
@@ -33,28 +34,29 @@ public class AuthService {
                 .password(passwordEncoder.encode(dto.password()))
                 .role(Role.USER)
                 .build();
-        playerRepository.save(newPlayer);
+        try{
+            playerRepository.save(newPlayer);
+        }catch (RuntimeException e){
+            throw new TennisLeagueAppException(ErrorType.EMAIL_IN_USE);
+        }
         String token = jwtService.generateToken(newPlayer);
         return AuthenticationResponse.builder()
                 .token(token)
                 .build();
     }
 
-
     public String login(PlayerLoginRequestDto dto) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(dto.getEmail(), dto.getPassword())
-        );
+        Authentication authentication;
+        try {
+            authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(dto.email(), dto.password()));
+        } catch (AuthenticationException e) {
+            throw new TennisLeagueAppException(ErrorType.EMAIL_OR_PASSWORD_WRONG);
+        }
+
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        Player authenticatedPlayer = playerRepository.findOptionalByEmail(dto.getEmail()).get();
-        String token = jwtService.generateToken(authenticatedPlayer);
-        System.out.println("Generated token at login: " + token);
-        System.out.println(authentication.isAuthenticated());
-        System.out.println(authentication.getCredentials());
-        System.out.println(authentication.getDetails());
-        System.out.println(authentication.getAuthorities());
-        System.out.println(authentication.getPrincipal());
-        return token;
+        Player authenticatedPlayer = playerRepository.findOptionalByEmail(dto.email())
+                .orElseThrow(() -> new TennisLeagueAppException(ErrorType.PLAYER_NOT_FOUND));
+        return jwtService.generateToken(authenticatedPlayer);
     }
 }

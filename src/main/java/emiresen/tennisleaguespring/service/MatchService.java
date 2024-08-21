@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -26,8 +25,8 @@ public class MatchService {
     private final EloRatingService eloRatingService;
 
     public MatchResponseDto saveNewMatch(SaveNewMatchRequestDto dto) {
-        Optional<Player> playerA = playerService.findById(dto.getPlayer1Id());
-        Optional<Player> playerB = playerService.findById(dto.getPlayer2Id());
+        Optional<Player> playerA = playerService.findById(dto.player1Id());
+        Optional<Player> playerB = playerService.findById(dto.player2Id());
 
         Match match = createMatchFromDto(dto);
         Match saved = matchRepository.save(match);
@@ -45,11 +44,11 @@ public class MatchService {
     }
 
     private Match createMatchFromDto(SaveNewMatchRequestDto dto) {
-        List<Match.Score> score = dto.getScore().stream()
+        List<Match.Score> score = dto.score().stream()
                 .map(scoreDto -> new Match.Score(
-                        dto.getPlayer1Id(),
+                        dto.player1Id(),
                         scoreDto.getPlayer1Score(),
-                        dto.getPlayer2Id(),
+                        dto.player2Id(),
                         scoreDto.getPlayer2Score()
                 ))
                 .toList();
@@ -58,11 +57,11 @@ public class MatchService {
                 .getPlayerProfileByEmail(playerService.getCurrentUserEmail());
 
         return Match.builder()
-                .court(dto.getCourt())
-                .date(dto.getDate())
-                .time(dto.getTime())
-                .player1Id(dto.getPlayer1Id())
-                .player2Id(dto.getPlayer2Id())
+                .court(dto.court())
+                .date(dto.date())
+                .time(dto.time())
+                .player1Id(dto.player1Id())
+                .player2Id(dto.player2Id())
                 .score(score)
                 .winnerId(determineWinner(dto))
                 .createdById(playerProfile.id())
@@ -116,7 +115,7 @@ public class MatchService {
         int player1Wins = 0;
         int player2Wins = 0;
 
-        for (Match.Score score : dto.getScore()) {
+        for (Match.Score score : dto.score()) {
             if (score.getPlayer1Score() > score.getPlayer2Score()) {
                 player1Wins++;
             } else if (score.getPlayer2Score() > score.getPlayer1Score()) {
@@ -125,9 +124,9 @@ public class MatchService {
         }
 
         if (player1Wins > player2Wins) {
-            return dto.getPlayer1Id();
+            return dto.player1Id();
         } else if (player2Wins > player1Wins) {
-            return dto.getPlayer2Id();
+            return dto.player2Id();
         } else {
             return "draw";  //todo think about this.
         }
