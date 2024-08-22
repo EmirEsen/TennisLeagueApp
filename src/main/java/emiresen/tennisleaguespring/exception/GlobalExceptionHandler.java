@@ -1,6 +1,5 @@
 package emiresen.tennisleaguespring.exception;
 
-import org.springdoc.api.ErrorMessage;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -23,9 +22,9 @@ public class GlobalExceptionHandler {
 
 
     @ExceptionHandler(TennisLeagueAppException.class)
-    public ResponseEntity<ErrorMessage> handleDemoException(TennisLeagueAppException ex) {
+    public ResponseEntity<ErrorObject> handleDemoException(TennisLeagueAppException ex) {
         ErrorType errorType = ex.getErrorType();
-        ResponseEntity err= new ResponseEntity(createErrorMessage(ex,
+        ResponseEntity<ErrorObject> err = new ResponseEntity<>(createErrorMessage(ex,
                 errorType),
                 errorType.getHttpStatus());
         System.out.println(err);
@@ -33,11 +32,10 @@ public class GlobalExceptionHandler {
     }
 
 
-   @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<ErrorMessage> handleAccess(TennisLeagueAppException ex)
-    {
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ErrorObject> handleAccess(TennisLeagueAppException ex) {
         ErrorType errorType = ex.getErrorType();
-        return new ResponseEntity(createErrorMessage(ex,
+        return new ResponseEntity<>(createErrorMessage(ex,
                 errorType),
                 errorType.getHttpStatus());
     }

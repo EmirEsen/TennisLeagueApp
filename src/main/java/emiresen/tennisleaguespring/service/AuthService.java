@@ -4,7 +4,6 @@ import emiresen.tennisleaguespring.document.Player;
 import emiresen.tennisleaguespring.document.Role;
 import emiresen.tennisleaguespring.dtos.request.PlayerLoginRequestDto;
 import emiresen.tennisleaguespring.dtos.request.PlayerRegisterRequestDto;
-import emiresen.tennisleaguespring.dtos.response.AuthenticationResponse;
 import emiresen.tennisleaguespring.dtos.response.ResponseDto;
 import emiresen.tennisleaguespring.exception.ErrorType;
 import emiresen.tennisleaguespring.exception.TennisLeagueAppException;
@@ -40,7 +39,6 @@ public class AuthService {
         }catch (RuntimeException e){
             throw new TennisLeagueAppException(ErrorType.EMAIL_IN_USE);
         }
-        String token = jwtService.generateToken(newPlayer);
         return ResponseDto.<String>builder()
                 .code(200)
                 .message("Successfully registered")

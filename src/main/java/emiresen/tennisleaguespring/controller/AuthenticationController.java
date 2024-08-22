@@ -3,7 +3,6 @@ package emiresen.tennisleaguespring.controller;
 
 import emiresen.tennisleaguespring.dtos.request.PlayerLoginRequestDto;
 import emiresen.tennisleaguespring.dtos.request.PlayerRegisterRequestDto;
-import emiresen.tennisleaguespring.dtos.response.AuthenticationResponse;
 import emiresen.tennisleaguespring.dtos.response.ResponseDto;
 import emiresen.tennisleaguespring.service.AuthService;
 import jakarta.validation.Valid;
