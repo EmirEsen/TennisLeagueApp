@@ -20,8 +20,8 @@ public class AuthenticationController {
     private final AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponse> registerNewPlayer(@Valid @RequestBody PlayerRegisterRequestDto dto) {
-        AuthenticationResponse registeredPlayer = authService.register(dto);
+    public ResponseEntity<ResponseDto<String>> registerNewPlayer(@Valid @RequestBody PlayerRegisterRequestDto dto) {
+        ResponseDto<String> registeredPlayer = authService.register(dto);
         return ResponseEntity.ok(registeredPlayer);
     }
 

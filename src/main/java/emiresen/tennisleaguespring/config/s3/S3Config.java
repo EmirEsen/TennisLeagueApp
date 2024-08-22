@@ -14,7 +14,7 @@ import software.amazon.awssdk.services.s3.S3Client;
 @Configuration
 public class S3Config {
 
-//    using .aws
+    //    using .aws
     @Value("${aws.credentials.profile}")
     private String awsProfile;
 

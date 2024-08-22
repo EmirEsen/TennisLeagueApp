@@ -5,6 +5,7 @@ import emiresen.tennisleaguespring.document.Role;
 import emiresen.tennisleaguespring.dtos.request.PlayerLoginRequestDto;
 import emiresen.tennisleaguespring.dtos.request.PlayerRegisterRequestDto;
 import emiresen.tennisleaguespring.dtos.response.AuthenticationResponse;
+import emiresen.tennisleaguespring.dtos.response.ResponseDto;
 import emiresen.tennisleaguespring.exception.ErrorType;
 import emiresen.tennisleaguespring.exception.TennisLeagueAppException;
 import emiresen.tennisleaguespring.repository.PlayerRepository;
@@ -26,7 +27,7 @@ public class AuthService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
-    public AuthenticationResponse register(PlayerRegisterRequestDto dto) {
+    public ResponseDto<String> register(PlayerRegisterRequestDto dto) {
         Player newPlayer = Player.builder()
                 .firstname(dto.firstname())
                 .lastname(dto.lastname())
@@ -40,8 +41,9 @@ public class AuthService {
             throw new TennisLeagueAppException(ErrorType.EMAIL_IN_USE);
         }
         String token = jwtService.generateToken(newPlayer);
-        return AuthenticationResponse.builder()
-                .token(token)
+        return ResponseDto.<String>builder()
+                .code(200)
+                .message("Successfully registered")
                 .build();
     }
 
