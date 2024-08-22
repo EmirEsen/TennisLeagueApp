@@ -1,12 +1,10 @@
 package emiresen.tennisleaguespring.controller;
 import emiresen.tennisleaguespring.dtos.request.PlayerProfileUpdateDto;
 import emiresen.tennisleaguespring.dtos.response.PlayerProfileResponseDto;
-import emiresen.tennisleaguespring.document.Player;
 import emiresen.tennisleaguespring.service.PlayerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
