@@ -50,9 +50,9 @@ public class PlayerController {
     @PostMapping(value = "/profile-image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasAnyAuthority('USER')")
     public void uploadPlayerProfileImage(@RequestParam("file") MultipartFile file, Authentication authentication){
-        System.out.println("File name: " + file.getOriginalFilename());
-        System.out.println("File size: " + file.getSize() + " bytes");
-        System.out.println("File type: " + file.getContentType());
+//        System.out.println("File name: " + file.getOriginalFilename());
+//        System.out.println("File size: " + file.getSize() + " bytes");
+//        System.out.println("File type: " + file.getContentType());
         playerService.uploadPlayerProfileImage(file, authentication);
     }
 
