@@ -12,12 +12,12 @@ Jwt:
     key: ${JWT_KEY}
 
 aws:
-  credentials:
-    accessKeyId: ${AWS_ACCESS_KEY_ID}
-    secretAccessKey: ${AWS_SECRET_ACCESS_KEY}
   region: ${AWS_REGION}
   s3:
     buckets:
-      customer: tennisleaguebucket
+      customer: ${AWS_BUCKET_NAME}
+  credentials:
+    access-key-id: ${AWS_ACCESS_KEY_ID}
+    secret-access-key: ${AWS_SECRET_ACCESS_KEY}
 
 
