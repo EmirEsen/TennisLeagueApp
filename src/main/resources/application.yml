@@ -6,6 +6,11 @@ spring:
     mongodb:
       uri: mongodb://127.0.0.1:27017/players
       auto-index-creation: true
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 3MB
+      max-request-size: 3MB
 
 
 #logging:
