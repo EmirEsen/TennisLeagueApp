@@ -5,7 +5,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
-import software.amazon.awssdk.auth.credentials.ProfileCredentialsProvider;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
@@ -14,10 +13,10 @@ import software.amazon.awssdk.services.s3.S3Client;
 @Configuration
 public class S3Config {
 
-    @Value("${aws.credentials.accessKeyId}")
+    @Value("${aws.credentials.access-key-id}")
     private String awsAccessKeyId;
 
-    @Value("${aws.credentials.secretAccessKey}")
+    @Value("${aws.credentials.secret-access-key}")
     private String awsSecretAccessKey;
 
     @Value("${aws.region}")
