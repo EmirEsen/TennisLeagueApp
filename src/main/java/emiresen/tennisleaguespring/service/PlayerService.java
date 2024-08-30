@@ -84,6 +84,8 @@ public class PlayerService {
                         System.err.println("Failed to generate S3 URL for player: " + player.getId());
                     }
 
+                    Integer rating = (player.getRating() != null && player.getMatchPlayed() > 2) ? player.getRating() : null;
+
                     return PlayerProfileResponseDto.builder()
                             .id(player.getId())
                             .firstname(player.getFirstname())
@@ -91,7 +93,7 @@ public class PlayerService {
                             .email(player.getEmail())
                             .heightInCm(player.getHeightInCm())
                             .weightInKg(player.getWeightInKg())
-                            .rating(player.getRating())
+                            .rating(rating)
                             .win(player.getWin())
                             .lose(player.getLose())
                             .matchPlayed(player.getMatchPlayed())
@@ -100,17 +102,19 @@ public class PlayerService {
                             .build();
                 })
 //                .sorted(Comparator.comparing(PlayerProfileResponseDto::rating).reversed())
-                .sorted((p1, p2) -> {
-                    if (p1.rating() == null && p2.rating() == null) {
-                        return 0; // Both are null, they are equal
-                    } else if (p1.rating() == null) {
-                        return 1; // p1 is null, put it after p2
-                    } else if (p2.rating() == null) {
-                        return -1; // p2 is null, put it after p1
-                    } else {
-                        return p2.rating().compareTo(p1.rating());
-                    }
-                })
+                .sorted(Comparator.comparing(PlayerProfileResponseDto::rating,
+                        Comparator.nullsLast(Comparator.reverseOrder())))
+//                .sorted((p1, p2) -> {
+//                    if (p1.rating() == null && p2.rating() == null) {
+//                        return 0; // Both are null, they are equal
+//                    } else if (p1.rating() == null) {
+//                        return 1; // p1 is null, put it after p2
+//                    } else if (p2.rating() == null) {
+//                        return -1; // p2 is null, put it after p1
+//                    } else {
+//                        return p2.rating().compareTo(p1.rating());
+//                    }
+//                })
                 .toList();
 
     }
