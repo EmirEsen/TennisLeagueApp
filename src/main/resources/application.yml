@@ -13,11 +13,19 @@ spring:
       max-file-size: 3MB
       max-request-size: 3MB
 
+
+#logging:
+#  level:
+#    org.springframework.security: TRACE
+
 Jwt:
   secret:
     key: ${JWT_KEY}
 
 aws:
-  region: ${AWS_REGION}
+  credentials:
+    profile: default
+  region: eu-north-1
   s3:
     buckets:
+      customer: tennisleaguebucket
