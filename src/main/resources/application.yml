@@ -4,7 +4,7 @@ server:
 spring:
   data:
     mongodb:
-      uri: mongodb+srv://${MONGO_USER}:${MONGO_PASSWORD}@tennisapp.1hde0.mongodb.net/?retryWrites=true&w=majority&appName=tennisapp
+      uri: mongodb+srv://emiresen:1234@tennisapp.1hde0.mongodb.net/?retryWrites=true&w=majority&appName=tennisapp
       database: admin
       auto-index-creation: true
   servlet:
@@ -21,9 +21,3 @@ aws:
   region: ${AWS_REGION}
   s3:
     buckets:
-      customer: ${AWS_BUCKET_NAME}
-  credentials:
-    access-key-id: ${AWS_ACCESS_KEY_ID}
-    secret-access-key: ${AWS_SECRET_ACCESS_KEY}
-
-
