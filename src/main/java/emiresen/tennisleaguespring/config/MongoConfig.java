@@ -15,7 +15,7 @@ public class MongoConfig extends AbstractMongoClientConfiguration {
 
     @Override
     protected String getDatabaseName() {
-        return "admin"; // Your default database name
+        return "tennisapp"; // Your default database name
     }
 
     @Bean
