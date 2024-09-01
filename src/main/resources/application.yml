@@ -4,9 +4,7 @@ server:
 spring:
   data:
     mongodb:
-#      uri: mongodb+srv://emiresen:1234@tennisapp.1hde0.mongodb.net/?retryWrites=true&w=majority&appName=tennisapp
-#      database: tennisapp
-
+      uri: ${spring.data.mongodb.uri}
       auto-index-creation: true
   servlet:
     multipart:
