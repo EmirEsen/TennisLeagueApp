@@ -12,6 +12,10 @@ spring:
       max-file-size: 3MB
       max-request-size: 3MB
 
+logging:
+  level:
+    org.springframework.security: TRACE
+
 Jwt:
   secret:
     key: ${JWT_KEY}
