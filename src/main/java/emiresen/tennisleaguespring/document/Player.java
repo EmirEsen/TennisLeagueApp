@@ -34,6 +34,8 @@ public class Player implements UserDetails {
     @Indexed(unique = true)
     private String email;
 
+    private Boolean isEmailVerified;
+
     @NotBlank
     private String password;
     @NotNull

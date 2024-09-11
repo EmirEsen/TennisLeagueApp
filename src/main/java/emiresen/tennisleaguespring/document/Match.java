@@ -32,6 +32,7 @@ public class Match {
     private String court;
     private LocalDate date;
     private String time;
+
     @NotBlank
     @Indexed
     private String player1Id;

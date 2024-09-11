@@ -7,6 +7,6 @@ import lombok.Builder;
 @Builder
 public record PlayerRegisterRequestDto(String firstname,
                                        String lastname,
-                                       @Email(message = "Enter valid email.") String email,
+                                       String email,
                                        @NotBlank String password) {
 }
