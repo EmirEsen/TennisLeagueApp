@@ -3,11 +3,10 @@ package emiresen.tennisleaguespring.controller;
 
 import emiresen.tennisleaguespring.dtos.request.PlayerLoginRequestDto;
 import emiresen.tennisleaguespring.dtos.request.PlayerRegisterRequestDto;
+import emiresen.tennisleaguespring.dtos.request.PlayerSendConfirmationEmailRequest;
 import emiresen.tennisleaguespring.dtos.response.ResponseDto;
-import emiresen.tennisleaguespring.exception.ErrorType;
 import emiresen.tennisleaguespring.exception.TennisLeagueAppException;
 import emiresen.tennisleaguespring.service.AuthService;
-import emiresen.tennisleaguespring.service.JwtService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 public class AuthenticationController {
 
     private final AuthService authService;
-    private final JwtService jwtService;
 
     @PostMapping("/register")
     public ResponseEntity<ResponseDto<String>> registerNewPlayer(@Valid @RequestBody PlayerRegisterRequestDto dto) {
@@ -38,14 +36,25 @@ public class AuthenticationController {
                 .build());
     }
 
+    @PostMapping("/send-confirmation-email")
+    public ResponseEntity<ResponseDto<String>> resendConfirmationEmail(@RequestBody PlayerSendConfirmationEmailRequest dto) {
+        System.out.println(dto.email());
+        authService.resendConfirmationEmail(dto.email());
+        return ResponseEntity.ok(ResponseDto.<String>builder()
+                .code(200)
+                .data("Email Sent")
+                .message("Confirmation Email Sent")
+                .build());
+    }
+
     //todo login after confirmation
-    @GetMapping("/confirm-email")
-    public ResponseEntity<ResponseDto<String>> confirmEmail(@RequestParam("token") String token) throws TennisLeagueAppException {
+    @GetMapping("/verify-email")
+    public ResponseEntity<ResponseDto<String>> verifyEmail(@RequestParam("token") String token) throws TennisLeagueAppException {
         try{
             if(authService.verifyPlayerEmail(token)){
                 return ResponseEntity.ok(ResponseDto.<String>builder()
                                 .code(200)
-                                .data("Email has been verified!")
+                                .data("Email verified")
                                 .message("Email verified")
                         .build());
             } else {

@@ -21,6 +21,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -84,6 +85,14 @@ public class AuthService {
     }
 
     public void sendRegistrationConfirmationEmail(Player player) throws MessagingException {
+        // Check for existing tokens related to the player
+        List<EmailConfirmationToken> existingTokens = emailConfirmationTokenRepository.findByPlayer(player);
+
+        // Delete existing tokens
+        if (existingTokens != null && !existingTokens.isEmpty()) {
+            emailConfirmationTokenRepository.deleteAll(existingTokens);
+        }
+
         // Generate the token
         String token = jwtService.generateEmailVerificationToken(player);
         EmailConfirmationToken emailConfirmationToken = new EmailConfirmationToken();
@@ -108,5 +117,25 @@ public class AuthService {
         return true;
     }
 
+    public void resendConfirmationEmail(String email) {
+        testFindOptionalByEmail(email);
+        System.out.println("Requested email: " + email);
+        Optional<Player> optionalPlayer = playerRepository.findOptionalByEmail(email);
 
+        if(optionalPlayer.isPresent()) {
+            System.out.println("Player found: " + optionalPlayer.get());
+            try {
+                sendRegistrationConfirmationEmail(optionalPlayer.get());
+            } catch (MessagingException e) {
+                throw new RuntimeException(e);
+            }
+        } else {
+            System.out.println("No player found with email: " + email);
+        }
+    }
+
+    public void testFindOptionalByEmail(String email) {
+        Optional<Player> player = playerRepository.findOptionalByEmail(email);
+        System.out.println(player.map(value -> "Player found: " + value).orElse("No player found."));
+    }
 }

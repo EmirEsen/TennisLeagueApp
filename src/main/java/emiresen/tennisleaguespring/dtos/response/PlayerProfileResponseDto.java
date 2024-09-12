@@ -18,7 +18,8 @@ public record PlayerProfileResponseDto(
         Integer win,
         Integer lose,
         String profileImageUrl,
-        String profileImageId
+        String profileImageId,
+        Boolean isEmailVerified
 ) {}
 
 

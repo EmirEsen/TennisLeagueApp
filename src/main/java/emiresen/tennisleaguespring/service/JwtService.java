@@ -3,6 +3,7 @@ package emiresen.tennisleaguespring.service;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import emiresen.tennisleaguespring.document.Player;
+import emiresen.tennisleaguespring.exception.TennisLeagueAppException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
