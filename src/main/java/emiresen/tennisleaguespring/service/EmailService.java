@@ -9,7 +9,8 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
-import java.nio.file.Files;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 @Service
@@ -34,9 +35,8 @@ public class EmailService {
     }
 
     private String loadHtmlTemplate(Map<String, String> placeholders) {
-        try {
-            ClassPathResource resource = new ClassPathResource("templates/" + "email-confirmation.html");
-            String content = Files.readString(resource.getFile().toPath());
+        try (InputStream inputStream = new ClassPathResource("templates/email-confirmation.html").getInputStream()) {
+            String content = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
 
             // Replace placeholders
             for (Map.Entry<String, String> entry : placeholders.entrySet()) {
@@ -50,7 +50,7 @@ public class EmailService {
     }
 
     private String generateConfirmationLink(String token){
-        return "http://localhost:9090/api/v1/auth/verify-email?token="+token;
+        return "https://tennisclub.biz/api/v1/auth/verify-email?token="+token;
     }
 
 }
