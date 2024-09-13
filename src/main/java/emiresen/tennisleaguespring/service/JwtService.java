@@ -2,6 +2,8 @@ package emiresen.tennisleaguespring.service;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import emiresen.tennisleaguespring.document.Player;
+import emiresen.tennisleaguespring.exception.TennisLeagueAppException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,7 @@ public class JwtService {
     private String SECRET_KEY;
 
     private final Long expiration = 1000L*60*10;
+    private final Long emailVerificationTokenExpiration = 1000L*60*15;
 
     public String generateToken(UserDetails userDetails) {
         Algorithm algorithm = Algorithm.HMAC256(SECRET_KEY);
@@ -22,6 +25,15 @@ public class JwtService {
                 .withExpiresAt(new Date(System.currentTimeMillis() + expiration))
                 .withIssuedAt(new Date(System.currentTimeMillis()))
                 .withSubject(userDetails.getUsername())
+                .sign(algorithm);
+    }
+
+    public String generateEmailVerificationToken(Player player) {
+        Algorithm algorithm = Algorithm.HMAC256(SECRET_KEY);
+        return JWT.create()
+                .withExpiresAt(new Date(System.currentTimeMillis() + emailVerificationTokenExpiration))
+                .withIssuedAt(new Date(System.currentTimeMillis()))
+                .withSubject(player.getEmail())
                 .sign(algorithm);
     }
 

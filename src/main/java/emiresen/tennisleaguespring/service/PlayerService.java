@@ -74,7 +74,7 @@ public class PlayerService {
     }
 
     public List<PlayerProfileResponseDto> findAll() {
-        return playerRepository.findAll().stream()
+        return playerRepository.findAllByIsEmailVerifiedTrue().stream()
                 .map(player -> {
                     String profileImageUrl = null;
                     try {
@@ -102,22 +102,9 @@ public class PlayerService {
                             .profileImageUrl(profileImageUrl)
                             .build();
                 })
-//                .sorted(Comparator.comparing(PlayerProfileResponseDto::rating).reversed())
                 .sorted(Comparator.comparing(PlayerProfileResponseDto::rating,
                         Comparator.nullsLast(Comparator.reverseOrder())))
-//                .sorted((p1, p2) -> {
-//                    if (p1.rating() == null && p2.rating() == null) {
-//                        return 0; // Both are null, they are equal
-//                    } else if (p1.rating() == null) {
-//                        return 1; // p1 is null, put it after p2
-//                    } else if (p2.rating() == null) {
-//                        return -1; // p2 is null, put it after p1
-//                    } else {
-//                        return p2.rating().compareTo(p1.rating());
-//                    }
-//                })
                 .toList();
-
     }
 
 
@@ -144,8 +131,8 @@ public class PlayerService {
                     .lose(player.getLose())
                     .dob(player.getDob())
                     .profileImageUrl(profileImageUrl)
+                    .isEmailVerified(player.getIsEmailVerified())
                     .build();
-
         }
         return null;
     }
@@ -176,15 +163,6 @@ public class PlayerService {
         updatePlayerProfileImageId(profileImageId, profileByEmail.email());
     }
 
-//    public byte[] getPlayerProfileImage(Authentication authentication) {
-//        PlayerProfileResponseDto profileByEmail = getPlayerProfileByEmail(authentication.getName());
-//
-//        var profileImageId = profileByEmail.profileImageId();
-//        byte[] profileImage = s3Service.getObject(s3Buckets.getCustomer(),
-//                "profile-images/%s/%s".formatted(profileByEmail.id(), profileImageId));
-//
-//        return profileImage;
-//    }
 
     public void updatePlayerProfileImageId(String imageId, String playerEmail) {
         Player player = playerRepository.findOptionalByEmail(playerEmail).orElseThrow();
