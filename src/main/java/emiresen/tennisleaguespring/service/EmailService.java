@@ -49,8 +49,8 @@ public class EmailService {
         }
     }
 
-    private String generateConfirmationLink(String token){
-        return "https://tennisclub.biz/api/v1/auth/verify-email?token="+token;
+    private String generateConfirmationLink(String token) {
+        return "https://tennisclub.biz/verify-email?token=" + token;
     }
 
 }
