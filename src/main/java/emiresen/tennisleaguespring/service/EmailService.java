@@ -50,7 +50,7 @@ public class EmailService {
     }
 
     private String generateConfirmationLink(String token){
-        return "http://localhost:9090/api/v1/auth/verify-email?token="+token;
+        return "http://localhost:5173/api/v1/auth/verify-email?token="+token;
     }
 
 }
