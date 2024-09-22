@@ -25,16 +25,37 @@ public class MatchService {
     private final EloRatingService eloRatingService;
 
     public MatchResponseDto saveNewMatch(SaveNewMatchRequestDto dto) {
-        Optional<Player> playerA = playerService.findById(dto.player1Id());
-        Optional<Player> playerB = playerService.findById(dto.player2Id());
+        Optional<Player> playerAOpt = playerService.findById(dto.player1Id());
+        Optional<Player> playerBOpt = playerService.findById(dto.player2Id());
 
-        Match match = createMatchFromDto(dto);
-        Match saved = matchRepository.save(match);
-
-        if (playerA.isPresent() && playerB.isPresent()) {
-            updatePlayerStatsIfPresent(playerA.get(), playerB.get(), saved);
+        if (playerAOpt.isEmpty() || playerBOpt.isEmpty()) {
+            throw new IllegalArgumentException("Both players must exist for the match to be recorded.");
         }
-        return buildMatchResponseDto(saved);
+
+        Player playerA = playerAOpt.get();
+        Player playerB = playerBOpt.get();
+
+        // Set initial ratings if this is the first match for either player
+        setInitialRatingIfFirstMatch(playerA);
+        setInitialRatingIfFirstMatch(playerB);
+
+        // Create and save match
+        Match match = createMatchFromDto(dto);
+        Match savedMatch = matchRepository.save(match);
+
+        // Store current ratings before updating
+        int playerARatingBefore = playerA.getRating();
+        int playerBRatingBefore = playerB.getRating();
+
+        // Update player stats and Elo ratings
+        updatePlayerStats(playerA, playerB, savedMatch);
+
+        // Calculate and store rating changes
+        savedMatch.setPlayer1RatingChange(playerA.getRating() - playerARatingBefore);
+        savedMatch.setPlayer2RatingChange(playerB.getRating() - playerBRatingBefore);
+        matchRepository.save(savedMatch);
+
+        return buildMatchResponseDto(savedMatch);
     }
 
     private void setInitialRatingIfFirstMatch(Player player) {
@@ -68,8 +89,7 @@ public class MatchService {
                 .build();
     }
 
-    private void updatePlayerStatsIfPresent(Player player1, Player player2, Match saved) {
-
+    private void updatePlayerStats(Player player1, Player player2, Match saved) {
         setInitialRatingIfFirstMatch(player1);
         setInitialRatingIfFirstMatch(player2);
 
@@ -80,21 +100,23 @@ public class MatchService {
         player2.setMatchPlayed(player2.getMatchPlayed() == null ? 1 : player2.getMatchPlayed() + 1);
 
         if (score1 > score2) {
-            player1.setWin(player1.getWin() == null ? 1 : player1.getWin() + 1);
-            player1.setLose(player1.getLose() == null ? 0 : player1.getLose());
-            player2.setLose(player2.getLose() == null ? 1 : player2.getLose() + 1);
-            player2.setWin(player2.getWin() == null ? 0 : player2.getWin());
+            updateWinLose(player2, player1);
         } else {
-            player2.setWin(player2.getWin() == null ? 1 : player2.getWin() + 1);
-            player2.setLose(player2.getLose() == null ? 0 : player2.getLose());
-            player1.setLose(player1.getLose() == null ? 1 : player1.getLose() + 1);
-            player1.setWin(player1.getWin() == null ? 0 : player1.getWin());
+            updateWinLose(player1, player2);
         }
+
 
         eloRatingService.updatePlayerRatings(player1, player2, score1, score2);
 
         playerService.save(player1);
         playerService.save(player2);
+    }
+
+    private void updateWinLose(Player player1, Player player2) {
+        player2.setWin(player2.getWin() == null ? 1 : player2.getWin() + 1);
+        player2.setLose(player2.getLose() == null ? 0 : player2.getLose());
+        player1.setLose(player1.getLose() == null ? 1 : player1.getLose() + 1);
+        player1.setWin(player1.getWin() == null ? 0 : player1.getWin());
     }
 
 
@@ -165,6 +187,8 @@ public class MatchService {
                                 .date(match.getDate())
                                 .time(match.getTime())
                                 .createdAt(match.getCreatedAt())
+                                .player1RatingChange(match.getPlayer1RatingChange())
+                                .player2RatingChange(match.getPlayer2RatingChange())
                                 .build()
                 ).toList();
     }
