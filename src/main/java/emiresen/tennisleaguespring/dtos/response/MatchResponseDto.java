@@ -22,6 +22,8 @@ public class MatchResponseDto {
     private String time;
     private String player1Id;
     private String player2Id;
+    private Integer player1RatingChange;
+    private Integer player2RatingChange;
     private LocalDateTime createdAt;
 
     private List<Match.Score> score;

@@ -41,6 +41,9 @@ public class Match {
     @Indexed
     private String player2Id;
 
+    private Integer player1RatingChange;
+    private Integer player2RatingChange;
+
     private List<Score> score;
     private String winnerId;
 
