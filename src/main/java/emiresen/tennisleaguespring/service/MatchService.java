@@ -101,10 +101,9 @@ public class MatchService {
 
         if (score1 > score2) {
             updateWinLose(player2, player1);
-        } else {
+        } else if (score2 > score1) {
             updateWinLose(player1, player2);
         }
-
 
         eloRatingService.updatePlayerRatings(player1, player2, score1, score2);
 
