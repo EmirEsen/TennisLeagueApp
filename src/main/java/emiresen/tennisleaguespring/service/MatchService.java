@@ -93,6 +93,15 @@ public class MatchService {
         setInitialRatingIfFirstMatch(player1);
         setInitialRatingIfFirstMatch(player2);
 
+        if ("draw".equals(saved.getWinnerId())) {
+            // Don't update ratings if the match is a draw
+            player1.setMatchPlayed(player1.getMatchPlayed() == null ? 1 : player1.getMatchPlayed() + 1);
+            player2.setMatchPlayed(player2.getMatchPlayed() == null ? 1 : player2.getMatchPlayed() + 1);
+            playerService.save(player1);
+            playerService.save(player2);
+            return;
+        }
+
         int score1 = (saved.getWinnerId().equals(player1.getId())) ? 1 : 0;
         int score2 = (saved.getWinnerId().equals(player2.getId())) ? 1 : 0;
 
@@ -101,10 +110,9 @@ public class MatchService {
 
         if (score1 > score2) {
             updateWinLose(player2, player1);
-        } else {
+        } else if (score2 > score1) {
             updateWinLose(player1, player2);
         }
-
 
         eloRatingService.updatePlayerRatings(player1, player2, score1, score2);
 
